@@ -31,6 +31,7 @@ export default {
         },
         handleBlur: function(){
             this.deactivateEditMode();
+            this.$emit('title-changed');
         },
         handleEscPressed: function(){
             this.deactivateEditMode();

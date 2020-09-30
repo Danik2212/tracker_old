@@ -1,9 +1,10 @@
 <template>
   <div class="tracker-item">
+    <input type="submit" value="+1" class="good-btn" v-on:click="handleAddGood">
+    <input type="submit" value="-1" class="bad-btn" v-on:click="handleAddBad">
+    <TrackerItemScore class="item-score" v-bind:item="item"/>
+    <TrackerItemName class="item-name" v-bind:item="item" v-on:title-changed="handleTitleChanged" />
     <RemoveButton v-on:remove="handleRemoveItem"/>
-    <TrackerItemName v-bind:item="item"/>
-    <GoodButton v-on:add-good="handleAddGood"/>
-    <BadButton v-on:add-bad="handleAddBad"/>
   </div>
 </template>
 
@@ -12,16 +13,14 @@
 
 
 import TrackerItemName from "./TrackerItemName.vue"
-import GoodButton from "./general/GoodButton.vue"
-import BadButton from "./general/BadButton.vue"
+import TrackerItemScore from "./TrackerItemScore.vue"
 import RemoveButton from "./general/RemoveButton.vue"
 
 export default {
   name:"TrackerItem",
   components:{
     TrackerItemName,
-    GoodButton,
-    BadButton,
+    TrackerItemScore,
     RemoveButton
   },
   props: ["item"],
@@ -34,6 +33,9 @@ export default {
     },
     handleAddBad: function(){
       this.$emit( 'add-bad', this.item.id );
+    },
+    handleTitleChanged: function(){
+      this.$emit( 'title-changed', this.item.id );
     }
   }
 
@@ -45,8 +47,35 @@ export default {
 
   .tracker-item{
     background: #f4f4f4;
-    padding-left: 10px;
     border-bottom: 1px #ccc dotted;
+    display:flex;
   }
+
+  .item-score{
+    flex:0;
+    padding: 5px;
+    margin: auto;
+  }
+
+  .item-name{
+    flex:20;
+    padding: 5px;
+  }
+
+  input[type="submit"]{
+    width: 50px;
+  }
+
+  .good-btn{
+    background: #00b503;
+    color: #fff;
+  }
+
+  .bad-btn{
+    background: #940101;
+    color: #fff;
+  }
+
+
 
 </style>

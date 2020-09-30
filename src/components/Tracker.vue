@@ -8,7 +8,8 @@
           <TrackerItem v-bind:item="item"
           v-on:remove="handleRemoveItem"
           v-on:add-good="handleAddGood"
-          v-on:add-bad="handleAddBad"/>
+          v-on:add-bad="handleAddBad"
+          v-on:title-changed="handleTitleChanged"/>
       </h3>
     </div>
   </div>
@@ -38,13 +39,28 @@ export default {
       this.items = this.items.filter( item => item.id !== id );
     },
     handleAddGood: function( id ){
-      this.getItemFromId( id ).goodCount++;
+      var itemIndex = this.getItemIndexFromId( id );
+      var item = this.items[ itemIndex ];
+      item.goodCount++;
+      this.items.splice( itemIndex, 1, item);
     },
     handleAddBad: function( id ){
-      this.getItemFromId( id ).badCount++;
+      var itemIndex = this.getItemIndexFromId( id );
+      var item = this.items[ itemIndex ];
+      item.badCount++;
+      this.items.splice( itemIndex, 1, item);
     },
-    getItemFromId: function( id ){
-      return this.items.filter( item => item.id === id );
+    handleTitleChanged: function( id ){
+      var itemIndex = this.getItemIndexFromId( id );
+      var item = this.items[ itemIndex ];
+      this.items.splice( itemIndex, 1, item);
+    },
+    getItemIndexFromId: function( id ){
+      return this.items.findIndex( item => item.id === id );
+    },
+    saveItems: function(){
+      const parsed = JSON.stringify( this.items );
+      localStorage.setItem('items', parsed);
     }
   },
   data() {
@@ -52,23 +68,28 @@ export default {
       items: [
           {
             id: 1,
-            title: "Plurals",
-            goodCount: 0,
-            badCount: 0
-          },
-          {
-            id: 2,
-            title: "Grammar",
-            goodCount: 0,
-            badCount: 0
-          },
-          {
-            id: 3,
-            title: "Nouns",
+            title: "Demo",
             goodCount: 0,
             badCount: 0
           }
       ]
+    }
+  },
+  mounted(){
+    if( localStorage.getItem('items')){
+      try{
+        this.items = JSON.parse( localStorage.getItem('items') );
+      }
+      catch( e )
+      {
+        localStorage.removeItem( 'items' );
+      }
+    }
+  },
+  watch:{
+    items(){
+      console.log(123);
+      this.saveItems();
     }
   }
 }
