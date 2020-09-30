@@ -1,25 +1,22 @@
 <template>
   <span class="tracker-item">
-    <span id="spanTitle" v-bind:class="{'hidden':editMode}"> {{item.title}}</span>
-    <input type="text" id="textInput" 
+    <span class="itemTitle" v-bind:class="{'hidden':editMode}" v-on:click="handleTextClick"> {{item.title}}</span>
+    <input type="text" id="textInput" ref="textEdit"
         v-model="item.title" 
         v-bind:class="{'hidden':!editMode}"
         v-on:blur="handleBlur"
         v-on:keyup.enter="handleEnterPressed"
         v-on:keyup.esc="handleEscPressed" />
-    <EditButton v-on:trackerItem-edit="onTrackerItemEdit"/>
   </span>
 </template>
 
 
 <script>
 
-import EditButton from "./EditButton.vue"
 
 export default {
   name:"TrackerItemName",
     components:{
-     EditButton
   },
   props: ["item"],
   data(){
@@ -29,8 +26,8 @@ export default {
   },
   methods:
   {
-      onTrackerItemEdit: function(){
-          this.activateEditMode();
+        handleTextClick: function(){
+            this.activateEditMode();
         },
         handleBlur: function(){
             this.deactivateEditMode();
@@ -42,8 +39,9 @@ export default {
             this.deactivateEditMode();
         },
         activateEditMode: function(){
-           this.editMode = true;
-           this.$emit('edit-mode-activated');
+            this.editMode = true;
+            this.$nextTick(() => this.$refs.textEdit.focus());
+            this.$emit('edit-mode-activated');
         },
         deactivateEditMode: function(){
             this.editMode = false;
@@ -58,9 +56,10 @@ export default {
 <style scoped>
 
 
-textarea{
+.itemTitle{
    width: 150px;
    height: 25px;
+   cursor: pointer;
 }
 
 .hidden{

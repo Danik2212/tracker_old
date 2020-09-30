@@ -1,42 +1,22 @@
 <template>
   <div id="app">
-    <Tracker v-bind:items="items" />
+    <Header/>
+    <Tracker/>
   </div>
 </template>
 
 <script>
 
 import Tracker from './components/Tracker.vue'
+import Header from './components/Header.vue'
 
 export default {
   name: 'App',
   components: {
-    Tracker
+    Tracker,
+    Header
   },
-  data() {
-    return {
-      items: [
-          {
-            id: 1,
-            title: "Plurals",
-            goodCount: 0,
-            badCount: 0
-          },
-          {
-            id: 2,
-            title: "Grammar",
-            goodCount: 0,
-            badCount: 0
-          },
-          {
-            id: 3,
-            title: "Nouns",
-            goodCount: 0,
-            badCount: 0
-          }
-      ]
-    }
-  }
+  
 }
 </script>
 

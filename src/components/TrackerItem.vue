@@ -1,6 +1,9 @@
 <template>
   <div class="tracker-item">
+    <RemoveButton v-on:remove="handleRemoveItem"/>
     <TrackerItemName v-bind:item="item"/>
+    <GoodButton v-on:add-good="handleAddGood"/>
+    <BadButton v-on:add-bad="handleAddBad"/>
   </div>
 </template>
 
@@ -9,13 +12,30 @@
 
 
 import TrackerItemName from "./TrackerItemName.vue"
+import GoodButton from "./general/GoodButton.vue"
+import BadButton from "./general/BadButton.vue"
+import RemoveButton from "./general/RemoveButton.vue"
 
 export default {
   name:"TrackerItem",
   components:{
     TrackerItemName,
+    GoodButton,
+    BadButton,
+    RemoveButton
   },
   props: ["item"],
+  methods:{
+    handleRemoveItem: function(){
+      this.$emit( 'remove', this.item.id );
+    },
+    handleAddGood: function(){
+      this.$emit( 'add-good', this.item.id );
+    },
+    handleAddBad: function(){
+      this.$emit( 'add-bad', this.item.id );
+    }
+  }
 
 }
 </script>
@@ -25,22 +45,8 @@ export default {
 
   .tracker-item{
     background: #f4f4f4;
-    padding: 10px;
+    padding-left: 10px;
     border-bottom: 1px #ccc dotted;
-  }
-
-  .is-complete{
-    text-decoration: line-through;
-  }
-
-  .del{
-    background: #ff0000;
-    color: #fff;
-    border: none;
-    padding: 5px 9px;
-    border-radius: 50%;
-    cursor: pointer;
-    float: right;
   }
 
 </style>
