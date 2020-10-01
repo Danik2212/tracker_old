@@ -25,9 +25,9 @@ export default {
 }
 </script>
 
-
 <style scoped>
-    .item-score{
-        width: 130px;
-    }
+  .item-score{
+    font-size: smaller;
+    margin:0;
+  }
 </style>

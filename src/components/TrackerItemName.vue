@@ -1,5 +1,5 @@
 <template>
-  <span class="tracker-item">
+  <div class="tracker-item">
     <span class="itemTitle" v-bind:class="{'hidden':editMode}" v-on:click="handleTextClick"> {{item.title}}</span>
     <input type="text" id="textInput" ref="textEdit"
         v-model="item.title" 
@@ -7,7 +7,7 @@
         v-on:blur="handleBlur"
         v-on:keyup.enter="handleEnterPressed"
         v-on:keyup.esc="handleEscPressed" />
-  </span>
+  </div>
 </template>
 
 
@@ -58,14 +58,18 @@ export default {
 
 
 .itemTitle{
-   width: 150px;
-   height: 25px;
    cursor: pointer;
+   font-size: smaller;
 }
 
 .hidden{
     display:none
 }
+
+input[type="text"]{
+    width: 100%;
+  }
+
 
 
 </style>

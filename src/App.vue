@@ -23,12 +23,13 @@ export default {
 <style>
   * {
     box-sizing: border-box;
-    margin: 0;
+    margin: auto;
     padding: 0;
+    max-width: 500px;
   }
 
   body{
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Tahoma, Geneva, sans-serif;
     line-height: 1.4;
   }
 </style>

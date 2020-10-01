@@ -1,10 +1,15 @@
 <template>
-  <div class="tracker-item">
-    <input type="submit" value="+1" class="good-btn" v-on:click="handleAddGood">
-    <input type="submit" value="-1" class="bad-btn" v-on:click="handleAddBad">
-    <TrackerItemScore class="item-score" v-bind:item="item"/>
+  <div class="tracker-item" id="maindiv">
+    <div class="tracker-left-column">
+      <GoodButton class="picture-button" v-on:add-good="handleAddGood"/>
+      <BadButton class="picture-button" v-on:add-bad="handleAddBad"/>
+      <TrackerItemScore class="item-score" v-bind:item="item"/>
+    </div>
     <TrackerItemName class="item-name" v-bind:item="item" v-on:title-changed="handleTitleChanged" />
-    <RemoveButton v-on:remove="handleRemoveItem"/>
+    <div class="tracker-right-column">
+      <RemoveButton class="picture-button" v-on:remove="handleRemoveItem"/>
+      <ResetButton class="picture-button" v-on:reset="handleReset"/>
+    </div>
   </div>
 </template>
 
@@ -15,13 +20,19 @@
 import TrackerItemName from "./TrackerItemName.vue"
 import TrackerItemScore from "./TrackerItemScore.vue"
 import RemoveButton from "./general/RemoveButton.vue"
+import GoodButton from "./general/GoodButton.vue"
+import BadButton from "./general/BadButton.vue"
+import ResetButton from "./general/ResetButton.vue"
 
 export default {
   name:"TrackerItem",
   components:{
     TrackerItemName,
     TrackerItemScore,
-    RemoveButton
+    RemoveButton,
+    GoodButton,
+    BadButton,
+    ResetButton
   },
   props: ["item"],
   methods:{
@@ -36,6 +47,9 @@ export default {
     },
     handleTitleChanged: function(){
       this.$emit( 'title-changed', this.item.id );
+    },
+    handleReset: function(){
+      this.$emit( 'reset', this.item.id );
     }
   }
 
@@ -47,34 +61,31 @@ export default {
 
   .tracker-item{
     background: #f4f4f4;
-    border-bottom: 1px #ccc dotted;
     display:flex;
   }
 
+  #maindiv{
+    border-bottom: 2px #ccc dotted;
+  }
   .item-score{
     flex:0;
     padding: 5px;
+    width: 130px;
     margin: auto;
   }
 
   .item-name{
-    flex:20;
+    flex:auto;
     padding: 5px;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    display: -webkit-box;
   }
 
-  input[type="submit"]{
-    width: 50px;
+  .picture-button{
+    flex-shrink:0;
   }
 
-  .good-btn{
-    background: #00b503;
-    color: #fff;
-  }
-
-  .bad-btn{
-    background: #940101;
-    color: #fff;
-  }
 
 
 

@@ -9,6 +9,7 @@
           v-on:remove="handleRemoveItem"
           v-on:add-good="handleAddGood"
           v-on:add-bad="handleAddBad"
+          v-on:reset="handleResetCount"
           v-on:title-changed="handleTitleChanged"/>
       </h3>
     </div>
@@ -53,6 +54,13 @@ export default {
     handleTitleChanged: function( id ){
       var itemIndex = this.getItemIndexFromId( id );
       var item = this.items[ itemIndex ];
+      this.items.splice( itemIndex, 1, item);
+    },
+    handleResetCount: function( id ){
+      var itemIndex = this.getItemIndexFromId( id );
+      var item = this.items[ itemIndex ];
+      item.badCount = 0;
+      item.goodCount = 0;
       this.items.splice( itemIndex, 1, item);
     },
     getItemIndexFromId: function( id ){
