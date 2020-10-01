@@ -7,8 +7,9 @@
     </div>
     <TrackerItemName class="item-name" v-bind:item="item" v-on:title-changed="handleTitleChanged" />
     <div class="tracker-right-column">
-      <RemoveButton class="picture-button" v-on:remove="handleRemoveItem"/>
+      <CopyButton class="picture-button" v-on:copy="handleCopy"/>
       <ResetButton class="picture-button" v-on:reset="handleReset"/>
+      <RemoveButton class="picture-button" v-on:remove="handleRemoveItem"/>
     </div>
   </div>
 </template>
@@ -23,6 +24,7 @@ import RemoveButton from "./general/RemoveButton.vue"
 import GoodButton from "./general/GoodButton.vue"
 import BadButton from "./general/BadButton.vue"
 import ResetButton from "./general/ResetButton.vue"
+import CopyButton from "./general/CopyButton.vue"
 
 export default {
   name:"TrackerItem",
@@ -32,7 +34,8 @@ export default {
     RemoveButton,
     GoodButton,
     BadButton,
-    ResetButton
+    ResetButton,
+    CopyButton
   },
   props: ["item"],
   methods:{
@@ -50,6 +53,21 @@ export default {
     },
     handleReset: function(){
       this.$emit( 'reset', this.item.id );
+    },
+    handleCopy: function(){
+      var str = this.item.title + " " + this.getPercentage();
+      const el = document.createElement('textarea');
+      el.value = str;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    },
+    getPercentage: function(){
+      if( ( this.item.goodCount + this.item.badCount ) == 0 ) return "0%"
+      var percent = this.item.goodCount / ( this.item.goodCount + this.item.badCount );
+      percent = (percent * 100).toFixed(0);
+      return percent + "%";
     }
   }
 
