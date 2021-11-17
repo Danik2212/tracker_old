@@ -1,5 +1,5 @@
 <template>
-  <div class="tracker-item" id="maindiv">
+  <div class="tracker-item" id="itemdiv">
     <div class="tracker-left-column">
       <GoodButton class="picture-button" v-on:add-good="handleAddGood"/>
       <BadButton class="picture-button" v-on:add-bad="handleAddBad"/>
@@ -25,6 +25,7 @@ import GoodButton from "./general/GoodButton.vue"
 import BadButton from "./general/BadButton.vue"
 import ResetButton from "./general/ResetButton.vue"
 import CopyButton from "./general/CopyButton.vue"
+import { itemCopy } from '../functions.js';
 
 export default {
   name:"TrackerItem",
@@ -49,26 +50,14 @@ export default {
       this.$emit( 'add-bad', this.item.id );
     },
     handleTitleChanged: function(){
-      this.$emit( 'title-changed', this.item.id );
+      this.$emit( 'title-changed');
     },
     handleReset: function(){
       this.$emit( 'reset', this.item.id );
     },
     handleCopy: function(){
-      var str = this.item.title + " " + this.getPercentage();
-      const el = document.createElement('textarea');
-      el.value = str;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
-    },
-    getPercentage: function(){
-      if( ( this.item.goodCount + this.item.badCount ) == 0 ) return "0%"
-      var percent = this.item.goodCount / ( this.item.goodCount + this.item.badCount );
-      percent = (percent * 100).toFixed(0);
-      return percent + "%";
-    }
+      itemCopy( this.item );
+    } 
   }
 
 }
@@ -82,7 +71,7 @@ export default {
     display:flex;
   }
 
-  #maindiv{
+  #itemdiv{
     border-bottom: 2px #ccc dotted;
   }
   .item-score{

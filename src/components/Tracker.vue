@@ -1,103 +1,125 @@
 <template>
   <div class="tracker-div">
     <div>
-      <TrackerNewItem v-on:add-new-item="handleNewItem"/>
+      <TrackerNewCat v-on:add-new-cat="handleNewCategory"/>
     </div>
-    <div v-bind:key="item.id" v-for="item in items">
+    <div v-bind:key="category.id" v-for="category in categories">
       <h3>
-          <TrackerItem v-bind:item="item"
-          v-on:remove="handleRemoveItem"
-          v-on:add-good="handleAddGood"
-          v-on:add-bad="handleAddBad"
-          v-on:reset="handleResetCount"
-          v-on:title-changed="handleTitleChanged"/>
+          <TrackerCategory v-bind:category="category"
+          v-on:cat-remove="handleRemoveCategory"
+          v-on:cat-title-changed="handleCatTitleChanged"
+          v-on:item-remove="handleRemoveItem"
+          v-on:item-add-good="handleAddGood"
+          v-on:item-add-bad="handleAddBad"
+          v-on:item-reset="handleResetCount"
+          v-on:item-new-item="handleNewItem"
+          v-on:item-title-changed="handleItemTitleChanged"/>
       </h3>
     </div>
   </div>
-
-
-
 
 </template>
 
 
 <script>
 
-import TrackerItem from './TrackerItem.vue'
-import TrackerNewItem from './TrackerNewItem.vue'
+import TrackerCategory from './TrackerCategory.vue'
+import TrackerNewCat from './TrackerNewCat.vue'
 
 export default {
   name:"Tracker",
   components: {
-      TrackerItem,
-      TrackerNewItem
+      TrackerCategory,
+      TrackerNewCat
   },
   methods:{
-    handleNewItem: function( newItem ){
-      this.items = [...this.items, newItem];
+    handleNewCategory: function( newCategory ){
+      this.categories = [...this.categories, newCategory];
+      this.save();
     },
-    handleRemoveItem: function( id ){
-      this.items = this.items.filter( item => item.id !== id );
+    handleRemoveCategory: function( id ){
+      this.categories = this.categories.filter( category => category.id !== id );
+      this.save();
     },
-    handleAddGood: function( id ){
-      var itemIndex = this.getItemIndexFromId( id );
-      var item = this.items[ itemIndex ];
+    handleCatTitleChanged: function(){
+      this.save();
+    },
+
+    handleNewItem: function( categoryId, newItem ){
+      var category = this.getCategoryFromId( categoryId );
+      category.items = [...category.items, newItem];
+      this.save();
+    },
+    handleRemoveItem: function( categoryId, id ){
+      var category = this.getCategoryFromId( categoryId );
+      category.items = category.items.filter( item => item.id !== id );
+      this.save();
+    },
+    handleAddGood: function( categoryId, id ){
+      var item = this.getItemFromId( categoryId, id );
       item.goodCount++;
-      this.items.splice( itemIndex, 1, item);
+      this.save();
     },
-    handleAddBad: function( id ){
-      var itemIndex = this.getItemIndexFromId( id );
-      var item = this.items[ itemIndex ];
+    handleAddBad: function( categoryId, id ){
+      var item = this.getItemFromId( categoryId, id );
       item.badCount++;
-      this.items.splice( itemIndex, 1, item);
+      this.save();
     },
-    handleTitleChanged: function( id ){
-      var itemIndex = this.getItemIndexFromId( id );
-      var item = this.items[ itemIndex ];
-      this.items.splice( itemIndex, 1, item);
+    handleItemTitleChanged: function(){
+      this.save();
     },
-    handleResetCount: function( id ){
-      var itemIndex = this.getItemIndexFromId( id );
-      var item = this.items[ itemIndex ];
+    handleResetCount: function( categoryId, id ){
+      var item = this.getItemFromId( categoryId, id );
       item.badCount = 0;
       item.goodCount = 0;
-      this.items.splice( itemIndex, 1, item);
+      this.save();
     },
-    getItemIndexFromId: function( id ){
-      return this.items.findIndex( item => item.id === id );
+    getCategoryFromId: function( categoryId ){
+      return this.categories.find( category => category.id === categoryId );
     },
-    saveItems: function(){
-      const parsed = JSON.stringify( this.items );
-      localStorage.setItem('items', parsed);
+    getItemFromId: function( categoryId, id ){
+      var category = this.getCategoryFromId( categoryId );
+      return category.items.find( item => item.id === id );
+    },
+    save: function(){
+      const parsed = JSON.stringify( this.categories );
+      localStorage.setItem('categories', parsed);
     }
   },
   data() {
     return {
-      items: [
-          {
-            id: 1,
-            title: "Demo",
-            goodCount: 0,
-            badCount: 0
-          }
+      categories:[
+        {
+           id: 1,
+           title: "Demo",
+           items: [
+            {
+              id: 2,
+              title: "Demo",
+              goodCount: 0,
+              badCount: 0
+            }
+          ]
+        }
       ]
+     
     }
   },
   mounted(){
-    if( localStorage.getItem('items')){
+    if( localStorage.getItem('categories')){
       try{
-        this.items = JSON.parse( localStorage.getItem('items') );
+        this.categories = JSON.parse( localStorage.getItem('categories') );
       }
       catch( e )
       {
-        localStorage.removeItem( 'items' );
+        localStorage.removeItem( 'categories' );
       }
     }
   },
   watch:{
-    items(){
+    categories(){
       console.log(123);
-      this.saveItems();
+      this.save();
     }
   }
 }

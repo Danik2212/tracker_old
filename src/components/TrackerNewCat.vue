@@ -1,11 +1,11 @@
 <template>
-  <div class="tracker-new-item">
+  <div class="tracker-new-cat">
     <span>
-        <form @submit.prevent="addNewItem" ref="form">
-            <input class="text-input" ref="title" type="text" name="title" placeholder="Add new item..."
+        <form @submit.prevent="addNewCat" ref="form">
+            <input class="text-input" ref="title" type="text" name="title" placeholder="Add new category..."
             v-on:keyup.enter="handleEnterPressed"
             v-model="title"/>
-            <NewItemButton ref="new-item-btn" v-on:new="handleNew"/>
+            <NewCatButton ref="new-cat-btn" v-on:new="handleNewCat"/>
         </form>
     </span>
   </div>
@@ -16,12 +16,12 @@
 
 import { v4 as uuidv4 }  from 'uuid';
 
-import NewItemButton from './general/NewItemButton'
+import NewCatButton from './general/NewCatButton'
 
 export default {
-  name:"TrackerNewItem",
+  name:"TrackerNewCat",
   components:{
-      NewItemButton,
+      NewCatButton,
   },
   data(){
       return{
@@ -29,18 +29,19 @@ export default {
       }
   },
   methods:{
-      handleNew: function(){
+      handleNewCat: function(){
           this.$refs["form"].requestSubmit();
       },
-      addNewItem: function(){
-          const newItem = {
+      addNewCat: function(){
+          const newCat = {
               id: uuidv4(),
               title: this.title,
-              goodCount: 0,
-              badCount: 0
+              items:[
+
+              ]
           };
           this.$refs.title.value = "";
-          this.$emit( 'add-new-item', newItem );
+          this.$emit( 'add-new-cat', newCat);
       },
       handleEnterPressed: function(){
 

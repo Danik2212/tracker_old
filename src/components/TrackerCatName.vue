@@ -1,8 +1,8 @@
 <template>
-  <div class="tracker-item-name">
-    <span class="itemTitle" v-bind:class="{'hidden':editMode}" v-on:click="handleTextClick"> {{item.title}}</span>
+  <div class="tracker-cat-name">
+    <span class="catTitle" v-bind:class="{'hidden':editMode}" v-on:click="handleTextClick"><h2> {{category.title}}</h2></span>
     <input type="text" id="textInput" ref="textEdit"
-        v-model="item.title" 
+        v-model="category.title" 
         v-bind:class="{'hidden':!editMode}"
         v-on:blur="handleBlur"
         v-on:keyup.enter="handleEnterPressed"
@@ -15,10 +15,10 @@
 
 
 export default {
-  name:"TrackerItemName",
+  name:"TrackerCatName",
     components:{
   },
-  props: ["item"],
+  props: ["category"],
   data(){
       return {
           editMode: false
@@ -57,9 +57,8 @@ export default {
 <style scoped>
 
 
-.itemTitle{
+.catTitle{
    cursor: pointer;
-   font-size: smaller;
 }
 
 .hidden{

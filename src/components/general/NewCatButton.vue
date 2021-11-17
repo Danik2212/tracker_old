@@ -9,7 +9,7 @@
 import PictureButton from "./PictureButton.vue"
 
 export default {
-  name:"NewButton",
+  name:"NewCatButton",
   components: {
     PictureButton
   },

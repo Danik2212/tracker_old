@@ -4,8 +4,6 @@
         ({{  item.goodCount / (item.goodCount+item.badCount) | percentage }}%) </span>
   </span>
 </template>
-
-
 <script>
 
 
